@@ -5,6 +5,9 @@ import com.vip.microservice.oauth2.support.security.core.UserDetailsAuthenticati
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -28,11 +31,11 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         //开放自定义的部分端点
-        httpSecurity.authorizeHttpRequests().requestMatchers("/token/*").permitAll();
+        httpSecurity.authorizeHttpRequests(customizer -> customizer.requestMatchers("/token/*").permitAll());
         //其它任意接口都需认证
-        httpSecurity.authorizeHttpRequests().anyRequest().authenticated();
+        httpSecurity.authorizeHttpRequests(customizer -> customizer.anyRequest().authenticated());
         //避免iframe同源无法登录 & 表单登录个性化
-        httpSecurity.headers().frameOptions().sameOrigin().and().apply(new FormIdentityLoginConfigurer());
+        httpSecurity.headers(customizer -> customizer.frameOptions(FrameOptionsConfig::sameOrigin)).apply(new FormIdentityLoginConfigurer());
         // 处理 UsernamePasswordAuthenticationToken
         httpSecurity.authenticationProvider(new UserDetailsAuthenticationProvider());
         return httpSecurity.build();
@@ -49,11 +52,13 @@ public class WebSecurityConfiguration {
     @Order(0)
     public SecurityFilterChain resources(HttpSecurity httpSecurity) throws Exception {
         //开放自定义的部分端点
-        httpSecurity.securityMatchers(configurer -> configurer.requestMatchers("/actuator/**", "/css/**", "/error"));
+        httpSecurity.securityMatchers(customizer -> customizer.requestMatchers("/actuator/**", "/css/**", "/error"));
         //其它任意接口都需认证
-        httpSecurity.authorizeHttpRequests().anyRequest().authenticated();
+        httpSecurity.authorizeHttpRequests(customizer -> customizer.anyRequest().authenticated());
         //禁用部分不要的功能
-        httpSecurity.requestCache().disable().securityContext().disable().sessionManagement().disable();
+        httpSecurity.requestCache(RequestCacheConfigurer::disable)
+                .securityContext(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
     }
 

@@ -156,7 +156,6 @@ public class AuthorizationServerConfiguration {
 
         accessTokenGenerator.setAccessTokenCustomizer(new CustomeOAuth2TokenCustomizer());
 
-
         return new DelegatingOAuth2TokenGenerator(accessTokenGenerator, new OAuth2RefreshTokenGenerator());
     }
 

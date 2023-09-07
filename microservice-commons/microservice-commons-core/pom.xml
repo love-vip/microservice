@@ -52,16 +52,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- httpclient -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>fluent-hc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-        </dependency>
-
         <!-- tools -->
         <dependency>
             <groupId>commons-codec</groupId>

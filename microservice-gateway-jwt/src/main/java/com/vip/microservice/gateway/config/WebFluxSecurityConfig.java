@@ -36,19 +36,19 @@ public class WebFluxSecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
         // jwt处理
-        httpSecurity.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());;
+        httpSecurity.oauth2ResourceServer(customizer -> customizer.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));;
         // 自定义处理token请求头过期或签名错误的结果
-        httpSecurity.oauth2ResourceServer().authenticationEntryPoint(new Oauth2AuthenticationEntryPoint());
+        httpSecurity.oauth2ResourceServer(customizer -> customizer.authenticationEntryPoint(new Oauth2AuthenticationEntryPoint()));
         // 自定义处理token请求头鉴权失败的结果
-        httpSecurity.oauth2ResourceServer().accessDeniedHandler(new Oauth2ServerAccessDeniedHandler());
+        httpSecurity.oauth2ResourceServer(customizer -> customizer.accessDeniedHandler(new Oauth2ServerAccessDeniedHandler()));
         //AJAX进行跨域请求时的预检,需要向另外一个域名的资源发送一个HTTP OPTIONS请求头,用以判断实际发送的请求是否安全
-        httpSecurity.authorizeExchange().pathMatchers(HttpMethod.OPTIONS).permitAll();
+        httpSecurity.authorizeExchange(customizer -> customizer.pathMatchers(HttpMethod.OPTIONS).permitAll());
         //白名单不拦截
-        httpSecurity.authorizeExchange().pathMatchers(ignoreUrlsConfig.getUrls()).permitAll();
+        httpSecurity.authorizeExchange(customizer -> customizer.pathMatchers(ignoreUrlsConfig.getUrls()).permitAll());
         /* 请求拦截处理 */
-        httpSecurity.authorizeExchange().anyExchange().access(new Oauth2AuthorizationManager());
+        httpSecurity.authorizeExchange(customizer -> customizer.anyExchange().access(new Oauth2AuthorizationManager()));
         //跨域保护禁用
-        httpSecurity.csrf().disable();
+        httpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable);
         return httpSecurity.build();
     }
 

@@ -9,26 +9,51 @@
         <version>2.0.0.RELEASE</version>
     </parent>
 
-    <artifactId>microservice-gateway</artifactId>
+    <artifactId>microservice-oauth2-opaque</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
 
-        <!-- Spring Cloud-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
+            <groupId>com.vip</groupId>
+            <artifactId>microservice-oauth2-api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
         </dependency>
+
+        <!-- Project -->
+        <dependency>
+            <groupId>com.vip</groupId>
+            <artifactId>microservice-starter</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.vip</groupId>-->
+<!--            <artifactId>oauth2-spring-boot-starter</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- Spring Oauth2 Resource -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+            <artifactId>spring-boot-starter-oauth2-authorization-server</artifactId>
+        </dependency>
+
+        <!--freemarker-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vip</groupId>
+            <artifactId>microservice-commons-core</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <!-- redis 引入 -->
@@ -38,25 +63,11 @@
             <version>${project.parent.version}</version>
         </dependency>
 
-        <!-- Project -->
+        <!-- Google Auth -->
         <dependency>
-            <groupId>com.vip</groupId>
-            <artifactId>microservice-starter</artifactId>
-            <version>${project.parent.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.warrenstrange</groupId>
+            <artifactId>googleauth</artifactId>
         </dependency>
-
-        <!-- for swagger -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-        </dependency>
-        <!-- for swagger -->
 
     </dependencies>
 

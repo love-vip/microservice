@@ -1,8 +1,5 @@
 package com.vip.microservice.oauth2.config;
 
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.vip.microservice.oauth2.support.security.core.customizer.CustomeOAuth2JwtTokenCustomizer;
@@ -19,7 +16,6 @@ import com.vip.microservice.oauth2.support.security.handler.AuthenticationSucces
 import com.vip.microservice.oauth2.support.security.password.OAuth2PasswordAuthenticationProvider;
 import com.vip.microservice.oauth2.support.security.sms.OAuth2SmsAuthenticationProvider;
 
-import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -30,7 +26,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
@@ -39,17 +34,11 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.oauth2.server.authorization.web.authentication.*;
-import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * <p>认证服务器配置 </p>
@@ -96,13 +85,13 @@ public class AuthorizationServerConfiguration {
         RequestMatcher endpointsMatcher = configurer.getEndpointsMatcher();
 
         // 授权码登录的登录页个性化
-        DefaultSecurityFilterChain securityFilterChain = httpSecurity.securityMatcher(endpointsMatcher).apply(new FormIdentityLoginConfigurer()).and().build();
+        httpSecurity.securityMatcher(endpointsMatcher).apply(new FormIdentityLoginConfigurer());
         // @formatter:on
 
-        /* 注入自定义授权模式实现  */
+        /* 注入自定义授权模式实现 */
         addCustomOAuth2GrantAuthenticationProvider(httpSecurity);
 
-        return securityFilterChain;
+        return httpSecurity.build();
     }
 
     /**
@@ -174,30 +163,10 @@ public class AuthorizationServerConfiguration {
         return new DelegatingOAuth2TokenGenerator(jwtGenerator, new OAuth2RefreshTokenGenerator());
     }
 
-    @Bean
-    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
-    }
 
     @Bean
     public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
         return new NimbusJwtEncoder(jwkSource);
-    }
-
-    @Bean
-    @SneakyThrows
-    public JWKSource<SecurityContext> jwkSource() {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        RSAKey rsaKey = new RSAKey.Builder(publicKey)
-                .privateKey(privateKey)
-                .keyID(UUID.randomUUID().toString())
-                .build();
-        JWKSet jwkSet = new JWKSet(rsaKey);
-        return new ImmutableJWKSet<>(jwkSet);
     }
 
 }
