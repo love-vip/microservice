@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: gateway-server
+  config:
+    activate:
+      on-profile: ${DEPLOY_ENV:dev}
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: ${NACOS_URL:127.0.0.1:8848}
+#        username: nacos
+#        password: nacos
+        namespace: ${spring.application.name}
+        refresh-enabled: false
+        extension-configs[0]:
+          dataId: ${spring.application.name}.yaml
+          group: DEFAULT_GROUP   # 默认为DEFAULT_GROUP
+          refresh: false   # 开启监听和自动刷新，默认为false
+        extension-configs[1]:
+          dataId: ${spring.application.name}-${DEPLOY_ENV:dev}.yaml
+          group: DEFAULT_GROUP   # 默认为DEFAULT_GROUP
+          refresh: true   # 开启监听和自动刷新，默认为false
+        # 从Nacos读取配置项的超时时间
+        timeout: 5000
+        # 长轮询超时时间
+        config-long-poll-timeout: 10000
+        # 轮询的重试时间
+        config-retry-time: 2000
+        # 长轮询最大重试次数
+        max-retry: 3
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+    web-application-type: reactive

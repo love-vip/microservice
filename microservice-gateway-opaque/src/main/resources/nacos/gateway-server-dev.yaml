@@ -27,7 +27,7 @@ secure:
     enable: false
   ignore:
     urls:
-      - /oauth2/**
+      - /oauth2-server/**
       - /uac/v3/api-docs/**
       - /swagger-ui.html
       - /webjars/**
@@ -46,8 +46,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: nacos:8848
-        namespace: c9c245b4-d275-465b-aa9b-7ee10655d14f
+        server-addr: 127.0.0.1:8848
     gateway:
       globalcors:
         corsConfigurations:
@@ -115,16 +114,9 @@ spring:
             - Path=/oauth2/**
   data:
     redis:
-      client-type: lettuce
-      cluster:
-        max-redirects: 5
-        nodes:
-          - redis:6379
-          - redis:6380
-          - redis:6381
-          - redis:6382
-          - redis:6383
-          - redis:6384
+      host: 127.0.0.1
+      port: 6379
+      password: passw0rd
       timeOut: 6000
       database: 1
       lettuce:

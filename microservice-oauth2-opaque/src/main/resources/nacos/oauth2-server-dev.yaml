@@ -25,13 +25,12 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: nacos:8848
-        namespace: c9c245b4-d275-465b-aa9b-7ee10655d14f
+        server-addr: 127.0.0.1:8848
 
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql:3306/admin_oauth2?setUnicode=true&characterEncoding=utf8&useSSL=false&&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/admin_oauth2?setUnicode=true&characterEncoding=utf8&useSSL=false&&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     hikari:
@@ -46,16 +45,9 @@ spring:
 
   data:
     redis:
-      client-type: lettuce
-      cluster:
-        max-redirects: 5
-        nodes:
-          - redis:6379
-          - redis:6380
-          - redis:6381
-          - redis:6382
-          - redis:6383
-          - redis:6384
+      host: 127.0.0.1
+      port: 6379
+      password: passw0rd
       timeOut: 6000
       database: 1
       lettuce:
