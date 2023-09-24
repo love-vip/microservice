@@ -77,7 +77,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.vip.microservice.oauth2.Oauth2ProviderApplication</mainClass>
+                    <mainClass>com.vip.microservice.oauth2.OpaqueOauth2ProviderApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
