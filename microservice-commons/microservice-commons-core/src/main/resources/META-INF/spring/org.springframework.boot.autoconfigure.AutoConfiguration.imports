@@ -1,0 +1,2 @@
+com.vip.microservice.commons.core.config.AsyncConfiguration
+com.vip.microservice.commons.core.config.MybatisPlusConfiguration
