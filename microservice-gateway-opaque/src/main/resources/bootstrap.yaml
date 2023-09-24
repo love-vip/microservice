@@ -12,7 +12,7 @@ spring:
 #        username: nacos
 #        password: nacos
         namespace: ${spring.application.name}
-        refresh-enabled: false
+        refresh-enabled: true
         extension-configs[0]:
           dataId: ${spring.application.name}.yaml
           group: DEFAULT_GROUP   # 默认为DEFAULT_GROUP
