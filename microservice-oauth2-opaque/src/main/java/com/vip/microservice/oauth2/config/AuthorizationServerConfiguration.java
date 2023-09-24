@@ -77,15 +77,15 @@ public class AuthorizationServerConfiguration {
         // 服务端点
         configurer.authorizationServerSettings(AuthorizationServerSettings.builder().build());
         httpSecurity.apply(configurer);
+        // 授权码登录的登录页个性化
+        httpSecurity.apply(new FormIdentityLoginConfigurer());
 
         // TODO 你可以根据需求对authorizationServerConfigurer进行一些个性化配置
         RequestMatcher endpointsMatcher = configurer.getEndpointsMatcher();
-
-        // 授权码登录的登录页个性化
-        DefaultSecurityFilterChain securityFilterChain = httpSecurity.securityMatcher(endpointsMatcher).apply(new FormIdentityLoginConfigurer()).and().build();
+        DefaultSecurityFilterChain securityFilterChain = httpSecurity.securityMatcher(endpointsMatcher).build();
         // @formatter:on
 
-        /* 注入自定义授权模式实现  */
+        /* 注入自定义授权模式实现 */
         addCustomOAuth2GrantAuthenticationProvider(httpSecurity);
 
         return securityFilterChain;

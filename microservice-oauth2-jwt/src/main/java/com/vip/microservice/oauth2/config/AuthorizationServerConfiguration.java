@@ -34,6 +34,7 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.oauth2.server.authorization.web.authentication.*;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -80,18 +81,18 @@ public class AuthorizationServerConfiguration {
         // 服务端点
         configurer.authorizationServerSettings(AuthorizationServerSettings.builder().build());
         httpSecurity.apply(configurer);
+        // 授权码登录的登录页个性化
+        httpSecurity.apply(new FormIdentityLoginConfigurer());
 
         // TODO 你可以根据需求对authorizationServerConfigurer进行一些个性化配置
         RequestMatcher endpointsMatcher = configurer.getEndpointsMatcher();
-
-        // 授权码登录的登录页个性化
-        httpSecurity.securityMatcher(endpointsMatcher).apply(new FormIdentityLoginConfigurer());
+        DefaultSecurityFilterChain securityFilterChain = httpSecurity.securityMatcher(endpointsMatcher).build();
         // @formatter:on
 
         /* 注入自定义授权模式实现 */
         addCustomOAuth2GrantAuthenticationProvider(httpSecurity);
 
-        return httpSecurity.build();
+        return securityFilterChain;
     }
 
     /**
