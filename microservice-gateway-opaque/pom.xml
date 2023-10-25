@@ -58,6 +58,12 @@
         </dependency>
         <!-- for swagger -->
 
+        <!-- spring-boot-dependencies 2.6.1  已经移除了它，所以这里自己来 -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

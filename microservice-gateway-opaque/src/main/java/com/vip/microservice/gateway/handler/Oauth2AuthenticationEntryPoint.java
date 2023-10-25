@@ -2,7 +2,7 @@ package com.vip.microservice.gateway.handler;
 
 import com.vip.microservice.commons.base.BaseCode;
 import com.vip.microservice.commons.base.wrapper.WrapMapper;
-import com.vip.microservice.commons.core.utils.JacksonUtil;
+import com.vip.microservice.commons.redis.utils.JacksonUtil;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;

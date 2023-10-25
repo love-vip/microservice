@@ -26,7 +26,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
+//import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -154,20 +154,14 @@ public class AuthorizationServerConfiguration {
      * @return OAuth2TokenGenerator
      */
     @Bean
-    public OAuth2TokenGenerator<OAuth2Token> oAuth2TokenGenerator(JwtEncoder jwtEncoder) {
+    public OAuth2TokenGenerator<OAuth2Token> oAuth2TokenGenerator(JWKSource<SecurityContext> jwkSource) {
 
-        JwtGenerator jwtGenerator = new JwtGenerator(jwtEncoder);
+        JwtGenerator jwtGenerator = new JwtGenerator(new NimbusJwtEncoder(jwkSource));
 
         /* 注入Token 增加关联用户信息 */
         jwtGenerator.setJwtCustomizer(new CustomeOAuth2JwtTokenCustomizer());
 
         return new DelegatingOAuth2TokenGenerator(jwtGenerator, new OAuth2RefreshTokenGenerator());
-    }
-
-
-    @Bean
-    public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
-        return new NimbusJwtEncoder(jwkSource);
     }
 
 }

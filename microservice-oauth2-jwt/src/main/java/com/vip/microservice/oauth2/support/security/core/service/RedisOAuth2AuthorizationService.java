@@ -2,7 +2,6 @@ package com.vip.microservice.oauth2.support.security.core.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.lang.Nullable;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
@@ -36,14 +35,11 @@ public class RedisOAuth2AuthorizationService implements OAuth2AuthorizationServi
         if (isAccessToken(authorization)) {
             OAuth2AccessToken accessToken = authorization.getAccessToken().getToken();
             long between = ChronoUnit.SECONDS.between(Objects.requireNonNull(accessToken.getIssuedAt()), accessToken.getExpiresAt());
-            //有效的，可反序列化的OAuth2AccessToken
-            redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(accessToken.getTokenValue(), authorization, between, TimeUnit.SECONDS);
         }
 
         if (isState(authorization)) {
             String token = authorization.getAttribute("state");
-            redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(token, authorization, TIMEOUT, TimeUnit.MINUTES);
         }
 
@@ -51,16 +47,12 @@ public class RedisOAuth2AuthorizationService implements OAuth2AuthorizationServi
             OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCode = authorization.getToken(OAuth2AuthorizationCode.class);
             OAuth2AuthorizationCode authorizationCodeToken = Objects.requireNonNull(authorizationCode).getToken();
             long between = ChronoUnit.MINUTES.between(Objects.requireNonNull(authorizationCodeToken.getIssuedAt()), authorizationCodeToken.getExpiresAt());
-            //有效的，可反序列化的OAuth2AccessToken
-            redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(authorizationCode.getToken().getTokenValue(), authorization, between, TimeUnit.MINUTES);
         }
 
         if (isRefreshToken(authorization)) {
             OAuth2RefreshToken refreshToken = Objects.requireNonNull(authorization.getRefreshToken()).getToken();
             long between = ChronoUnit.SECONDS.between(Objects.requireNonNull(refreshToken.getIssuedAt()), refreshToken.getExpiresAt());
-            //有效的，可反序列化的OAuth2RefreshToken
-            redisTemplate.setValueSerializer(RedisSerializer.java());
             redisTemplate.opsForValue().set(refreshToken.getTokenValue(), authorization, between, TimeUnit.SECONDS);
         }
     }
@@ -103,7 +95,6 @@ public class RedisOAuth2AuthorizationService implements OAuth2AuthorizationServi
     public OAuth2Authorization findByToken(String token, @Nullable OAuth2TokenType tokenType) {
         Assert.hasText(token, "token cannot be empty");
 //        Assert.notNull(tokenType, "tokenType cannot be empty");
-        redisTemplate.setValueSerializer(RedisSerializer.java());
         return (OAuth2Authorization) redisTemplate.opsForValue().get(token);
     }
 

@@ -1,14 +1,17 @@
-package com.vip.microservice.commons.core.utils;
+package com.vip.microservice.commons.redis.utils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.base.Preconditions;
+import io.micrometer.common.util.StringUtils;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 
@@ -53,12 +56,10 @@ public class JacksonUtil {
      * @param obj the obj
      *
      * @return string string
-     *
-     * @throws IOException the io exception
      */
     @SneakyThrows(IOException.class)
     public static String toJson(Object obj) {
-        Preconditions.checkArgument(obj != null, "this argument is required; it must not be null");
+        Assert.notNull(obj, "this argument is required; it must not be null");
         return defaultMapper.writeValueAsString(obj);
     }
 
@@ -72,12 +73,10 @@ public class JacksonUtil {
      * @param valueType the value type
      *
      * @return t t
-     *
-     * @throws IOException the io exception
      */
     @SneakyThrows(IOException.class)
     public static <T> T parseJson(String jsonValue, Class<T> valueType) {
-        Preconditions.checkArgument(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
+        Assert.isTrue(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
         return defaultMapper.readValue(jsonValue, valueType);
     }
 
@@ -89,12 +88,10 @@ public class JacksonUtil {
      * @param valueType the value type
      *
      * @return t t
-     *
-     * @throws IOException the io exception
      */
     @SneakyThrows(IOException.class)
     public static <T> T parseJson(String jsonValue, JavaType valueType){
-        Preconditions.checkArgument(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
+        Assert.isTrue(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
         return defaultMapper.readValue(jsonValue, valueType);
     }
 
@@ -106,12 +103,10 @@ public class JacksonUtil {
      * @param valueTypeRef the value type ref
      *
      * @return t t
-     *
-     * @throws IOException the io exception
      */
     @SneakyThrows(IOException.class)
     public static <T> T parseJson(String jsonValue, TypeReference<T> valueTypeRef){
-        Preconditions.checkArgument(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
+        Assert.isTrue(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
         return defaultMapper.readValue(jsonValue, valueTypeRef);
     }
 
@@ -122,12 +117,11 @@ public class JacksonUtil {
      *
      * @return string string
      *
-     * @throws IOException the io exception
      */
     @SneakyThrows(IOException.class)
     public static String toJsonWithFormat(Object obj){
-        Preconditions.checkArgument(obj != null, "this argument is required; it must not be null");
-        return formatMapper.writeValueAsString(obj);
+        Assert.isTrue(obj != null, "this argument is required; it must not be null");
+        return defaultMapper.writeValueAsString(obj);
     }
 
     /**
@@ -140,13 +134,11 @@ public class JacksonUtil {
      * @param valueType the value type
      *
      * @return t t
-     *
-     * @throws IOException the io exception
      */
     @SneakyThrows(IOException.class)
     public static <T> T parseJsonWithFormat(String jsonValue, Class<T> valueType) {
-        Preconditions.checkArgument(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
-        return formatMapper.readValue(jsonValue, valueType);
+        Assert.isTrue(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
+        return defaultMapper.readValue(jsonValue, valueType);
     }
 
     /**
@@ -157,13 +149,11 @@ public class JacksonUtil {
      * @param valueType the value type
      *
      * @return t t
-     *
-     * @throws IOException the io exception
      */
     @SneakyThrows(IOException.class)
     public static <T> T parseJsonWithFormat(String jsonValue, JavaType valueType) {
-        Preconditions.checkArgument(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
-        return formatMapper.readValue(jsonValue, valueType);
+        Assert.isTrue(StringUtils.isNotEmpty(jsonValue), "this argument is required; it must not be null");
+        return defaultMapper.readValue(jsonValue, valueType);
     }
 
     /**
@@ -174,13 +164,11 @@ public class JacksonUtil {
      * @param valueTypeRef the value type ref
      *
      * @return t t
-     *
-     * @throws IOException the io exception
      */
     @SneakyThrows(IOException.class)
     public static <T> T parseJsonWithFormat(String jsonValue, TypeReference<T> valueTypeRef){
-        Preconditions.checkArgument(StringUtils.isNotEmpty(jsonValue), "jsonValue is not null");
-        return formatMapper.readValue(jsonValue, valueTypeRef);
+        Assert.isTrue(StringUtils.isNotEmpty(jsonValue), "jsonValue is not null");
+        return defaultMapper.readValue(jsonValue, valueTypeRef);
     }
 
 }

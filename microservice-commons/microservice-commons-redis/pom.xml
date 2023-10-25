@@ -28,14 +28,19 @@
         <!-- Project -->
         <dependency>
             <groupId>com.vip</groupId>
-            <artifactId>microservice-commons-core</artifactId>
+            <artifactId>microservice-commons-base</artifactId>
             <version>${project.parent.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.baomidou</groupId>
-                    <artifactId>mybatis-plus-boot-starter</artifactId>
-                </exclusion>
-            </exclusions>
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>com.baomidou</groupId>-->
+<!--                    <artifactId>mybatis-plus-boot-starter</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-authorization-server</artifactId>
         </dependency>
 
     </dependencies>

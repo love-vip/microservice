@@ -36,11 +36,7 @@
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
 
-        <!-- spring-boot-dependencies 2.6.1  已经移除了它，所以这里自己来 -->
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>oauth2-oidc-sdk</artifactId>
-        </dependency>
+        <!-- security -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-rsa</artifactId>
@@ -50,6 +46,12 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- spring-boot-dependencies 2.6.1  已经移除了它，所以这里自己来 -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
         </dependency>
 
         <!-- tools -->
